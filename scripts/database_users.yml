@@ -1,8 +1,0 @@
----
-postgresql:
-  username: postgresql
-  password: postgresql
-shiftreservation:
-  username: shiftreservation
-  password: shiftreservation
-...
