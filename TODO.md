@@ -1,0 +1,2 @@
+- Extract the lsit of user and passwords to a var file
+- Allow the use to choose postgresql version
