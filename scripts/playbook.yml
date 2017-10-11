@@ -45,6 +45,7 @@
            - { username: shiftreservation, password: shiftreservation }
            - { username: root, password: smartvm }
            - { username: postgres, password: postgres }
+           - { username: galaxy, password: galaxy }
       with_items: "{{ dbusers }}"
       postgresql_user: name={{ item.username }} password={{ item.password }} state=present role_attr_flags=SUPERUSER
     - name: create directory for memcached
