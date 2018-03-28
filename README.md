@@ -1,7 +1,7 @@
 # postgresql-vagrant
 
-A Vagrant file to create an environment with postgresql and memcached, to avoid installing them in the system.
-It creates a fedora Image, updates it, configures it, and installs and configures memcached and postgresql with users.
+A Vagrant file to create an environment with postgresql, to avoid installing anything in the system.
+It creates a CentOS Image, updates it, configures it, and installs and configures postgresql with users defined in a playbook.
 
 
 # Instructions
@@ -17,4 +17,4 @@ Please configure your application so that it connects to localhost for postgres 
 
     host: localhost
 
-Connect to it in localhost and normal port
+Connect to it in localhost and normal port (5432)
