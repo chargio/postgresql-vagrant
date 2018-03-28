@@ -13,7 +13,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "fedora/25-cloud-base"
+  config.vm.box = "centos/7"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -23,9 +23,9 @@ Vagrant.configure(2) do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  #config.vm.network "forwarded_port", guest: 80, host:   13080
   config.vm.network "forwarded_port", guest: 5432, host: 5432
-  config.vm.network "forwarded_port", guest: 11211, host: 11211
+  # Needed by memcached
+  # config.vm.network "forwarded_port", guest: 11211, host: 11211
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -93,6 +93,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", privileged: false, inline: <<-EOF
     echo "Vagrant Box provisioned!"
     echo "Local server address is running postgresql"
-    echo "Please configure your project to use host: localhost as database"
+    echo "Please configure your project to use host: localhost as database in port 5432"
   EOF
 end

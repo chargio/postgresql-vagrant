@@ -1,2 +1,2 @@
 #!/bin/bash
-dnf -y install python python2-dnf
+yum -y install python epel-release centos-release-scl
