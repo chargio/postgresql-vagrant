@@ -4,17 +4,20 @@
   tasks:
     - hostname: name=postgresql
     - name: install OS packages for development
-      yum: name={{ item }} state=latest
-      with_items:
-        - libselinux-python
-        - python-psycopg2
-        - python-firewall
-        - rh-postgresql96
-        - rh-postgresql96-syspaths
-        - bash-completion
-        - vim
+      yum: 
+        name: 
+          - libselinux-python
+          - python-psycopg2
+          - python-firewall
+          - rh-postgresql96
+          - rh-postgresql96-syspaths
+          - bash-completion
+          - vim
+        state: latest
     - name: install OS elements
-      yum: name=* state=latest
+      yum: 
+        name: '*' 
+        state: latest
     - name: Initiate database
       become: true
       command: postgresql-setup --initdb
@@ -60,16 +63,7 @@
     - name: verify if we need to reboot
       command:  /usr/bin/needs-restarting
       register: reboot_needed
-    - name: reboot machine
-      shell: sleep 2 && /sbin/shutdown -r now "System reboot"
-      async: 1
-      poll: 0
-      ignore_errors: yes
-      when: reboot_needed.stdout != ""
-    - name: wait for machine to restart
-      wait_for_connection:
-        delay: 60
-        sleep: 5
-        timeout: 300
+    - name: reboot machine and wait for it to come back
+      reboot:
       when: reboot_needed.stdout != ""
 ...
