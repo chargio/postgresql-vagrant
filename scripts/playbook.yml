@@ -9,8 +9,8 @@
           - libselinux-python
           - python-psycopg2
           - python-firewall
-          - rh-postgresql96
-          - rh-postgresql96-syspaths
+          - rh-postgresql10
+          - rh-postgresql10-syspaths
           - bash-completion
           - vim
         state: latest
@@ -21,20 +21,20 @@
     - name: Initiate database
       become: true
       command: postgresql-setup --initdb
-               creates=/var/opt/rh/rh-postgresql96/lib/pgsql/data/postgresql.conf
+               creates=/var/opt/rh/rh-postgresql10/lib/pgsql/data/postgresql.conf
 
     - name: configure pg_hba.conf for local access
-      replace: dest=/var/opt/rh/rh-postgresql96/lib/pgsql/data/pg_hba.conf 
+      replace: dest=/var/opt/rh/rh-postgresql10/lib/pgsql/data/pg_hba.conf 
                   regexp='^(local\s*\w*\s*\w*\s*)(peer)'
                   replace='\1trust' 
                   backup=yes
     - name: configure pg_hba.conf for network access
-      replace: dest=/var/opt/rh/rh-postgresql96/lib/pgsql/data/pg_hba.conf 
+      replace: dest=/var/opt/rh/rh-postgresql10/lib/pgsql/data/pg_hba.conf 
                regexp='^(host\s*\w*\s*\w*\s*)(127.0.0.1/32)\s*(ident)'
                replace='\1 0.0.0.0/0        trust'
                backup=yes
     - name: configure postgresql.conf
-      lineinfile:  path=/var/opt/rh/rh-postgresql96/lib/pgsql/data/postgresql.conf
+      lineinfile:  path=/var/opt/rh/rh-postgresql10/lib/pgsql/data/postgresql.conf
                    regexp='^listen_addresses.*'
                    line="listen_addresses = '*'"
                    backup=yes
