@@ -73,6 +73,7 @@ Vagrant.configure(2) do |config|
   # Run Ansible from the Vagrant VM 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "scripts/playbook.yml"
+    ansible.compatibility_mode = "2.0"
   end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
