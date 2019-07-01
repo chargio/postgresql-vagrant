@@ -1,0 +1,4 @@
+---
+- dbs: 
+  - {name: openreservation, encoding: UTF-8}
+...

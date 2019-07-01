@@ -1,9 +1,12 @@
 ---
 - hosts: all
   become: true
+  vars_files:
+      - databases.yaml
+      - database_users.yaml
   tasks:
     - hostname: name=postgresql
-    - name: install OS packages for development
+    - name: install OS packages needed for development
       yum: 
         name: 
           - libselinux-python
@@ -14,7 +17,7 @@
           - bash-completion
           - vim
         state: latest
-    - name: install OS elements
+    - name: update OS elements to latest version
       yum: 
         name: '*' 
         state: latest
@@ -39,15 +42,16 @@
                    line="listen_addresses = '*'"
                    backup=yes
     - name: Start PostgreSQL and enable at boot
-      service: name=postgresql
-               enabled=yes
-               state=started
+      service: 
+        name: postgresql
+        enabled: yes
+        state: started
+    - name: create databases
+      with_items: "{{ dbs }}"
+      postgresql_db:
+        name: "{{ item.name }}"
+        encoding: "{{ item.encoding }}"
     - name: create users in postgres
-      vars:
-        dbusers:
-           - { username: postgres, password: postgres }
-           - { username: openreservation, password: openreservation }
-
       with_items: "{{ dbusers }}"
       postgresql_user: name={{ item.username }} password={{ item.password }} state=present role_attr_flags=SUPERUSER
     - name: reload postgresql
@@ -61,7 +65,14 @@
     - name: verify if we need to reboot
       command:  /usr/bin/needs-restarting
       register: reboot_needed
+    - debug:
+        msg: "Reboot needed"
+      when: reboot_needed.stdout != ""
+    - debug:
+        msg: "Reboot not needed"
+      when: reboot_needed.stdout == ""
     - name: reboot machine and wait for it to come back
       reboot:
       when: reboot_needed.stdout != ""
+      ignore_errors: True
 ...

@@ -1,0 +1,5 @@
+---
+- dbusers: 
+  - { username: postgres, password: postgres }
+  - { username: openreservation, password: openreservation }
+...
