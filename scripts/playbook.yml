@@ -7,37 +7,42 @@
   tasks:
     - hostname: name=postgresql
     - name: install OS packages needed for development
-      yum: 
+      dnf: 
         name: 
-          - libselinux-python
-          - python-psycopg2
-          - python-firewall
-          - rh-postgresql10
-          - rh-postgresql10-syspaths
+          # libselinux-python
+          - python3-psycopg2
+          # python-firewall
+          # "@postgresql:10"
+          # rh-postgresql10-syspaths
           - bash-completion
           - vim
         state: latest
+    - name: install Postgresql 10 database
+      dnf:
+        name: '@postgresql:10'
+        state: present
     - name: update OS elements to latest version
-      yum: 
+      dnf: 
         name: '*' 
         state: latest
     - name: Initiate database
       become: true
       command: postgresql-setup --initdb
-               creates=/var/opt/rh/rh-postgresql10/lib/pgsql/data/postgresql.conf
+               creates=/var/lib/pgsql
+               creates=/var/lib/pgsql/data/postgresql.conf
 
     - name: configure pg_hba.conf for local access
-      replace: dest=/var/opt/rh/rh-postgresql10/lib/pgsql/data/pg_hba.conf 
+      replace: dest=/var/lib/pgsql/data/pg_hba.conf 
                   regexp='^(local\s*\w*\s*\w*\s*)(peer)'
                   replace='\1trust' 
                   backup=yes
     - name: configure pg_hba.conf for network access
-      replace: dest=/var/opt/rh/rh-postgresql10/lib/pgsql/data/pg_hba.conf 
+      replace: dest=/var/lib/pgsql/data/pg_hba.conf 
                regexp='^(host\s*\w*\s*\w*\s*)(127.0.0.1/32)\s*(ident)'
                replace='\1 0.0.0.0/0        trust'
                backup=yes
     - name: configure postgresql.conf
-      lineinfile:  path=/var/opt/rh/rh-postgresql10/lib/pgsql/data/postgresql.conf
+      lineinfile:  path=/var/lib/pgsql/data/postgresql.conf
                    regexp='^listen_addresses.*'
                    line="listen_addresses = '*'"
                    backup=yes
