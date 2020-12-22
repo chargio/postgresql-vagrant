@@ -19,8 +19,10 @@
         state: latest
     - name: install Postgresql 10 database
       dnf:
-        name: '@postgresql:10'
-        state: present
+        name:
+          - '@postgresql:10'
+          - postgresql-contrib
+        state: latest
     - name: update OS elements to latest version
       dnf: 
         name: '*' 
