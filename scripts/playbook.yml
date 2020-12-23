@@ -9,11 +9,7 @@
     - name: install OS packages needed for development
       dnf: 
         name: 
-          # libselinux-python
           - python3-psycopg2
-          # python-firewall
-          # "@postgresql:10"
-          # rh-postgresql10-syspaths
           - bash-completion
           - vim
         state: latest
@@ -21,6 +17,7 @@
       dnf:
         name:
           - '@postgresql:10'
+          - 'postgresql-server'
           - postgresql-contrib
         state: latest
     - name: update OS elements to latest version
